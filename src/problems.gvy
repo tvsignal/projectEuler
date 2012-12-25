@@ -1,9 +1,15 @@
 new Euler().main()
 
 import static java.lang.Math.*
+import static java.lang.Integer.*
 
 public class Euler {
 
+    void main() {
+        assert noDigitsInCommon("4327","659")
+        println problem32()
+    }
+    
     // 1: multiples of 3 or 5
     def problem1() {(3..999).findAll { it % 3 == 0 || it % 5 == 0}.sum()}
 
@@ -72,7 +78,7 @@ public class Euler {
                     1 == (lastFirstSunday = (1..5).collect {it*7 + lastFirstSunday}.findAll {it > nofDays}.min() - nofDays)
                 }
             ]
-        }0 7 14 21        
+        }
         .collect { 
             it.year == 1900 ?
                 it.months.contains(12) ? 1 : 0
@@ -83,10 +89,37 @@ public class Euler {
         .flatten().sum()
     }
 
-    void main() {
-        assert [5,10] == [1,2]*.multiply(5)
-        assert [1904,1908,1912,1916,1920,1924,1928,1932,1936,1940,1944,1948,1952,1956,1960,1964,1968,1972,1976,1980,1984,1988,1992,1996,2000] ==
-        (1900..2000).findAll{ year -> !( year % 4 || (year % 100 == 0 && year % 400) )}
-        println problem19()
+    //32: Pandigital products
+    def problem32() {
+        def products = []
+        (1..99).collect{""+it}.findAll {it.matches(/[1-9]+/)}.findAll { !(it =~ /(.).*\1/) }
+        .each {a ->
+            (100..9999).collect{""+it}.findAll {it.matches(/[1-9]+/)}.findAll { !(it =~ /(.).*\1/) && noDigitsInCommon(a,it)}
+            .each { b ->
+                def c = ""+(valueOf(a)*valueOf(b))
+                if ( c.matches(/[1-9]+/) && (a+b+c).size() == 9 && !(c =~ /(.).*\1/) && noDigitsInCommon(c, a+b)) {
+                    println ((a+b) + c)
+                    products.push(valueOf(c))
+                }
+            }
+        }
+        products.unique().sum()
     }
+
+    //42: Pentagon numbers
+    def problem42() {
+        def minDelta = Integer.MAX_VALUE
+        def separation = 10
+        def minN = 1
+        while(true) {
+
+            separation += 10
+        }
+
+    }
+
+    def noDigitsInCommon(a, b) {
+        b.findAll {a.contains(it)}.size() == 0
+    }
+
 }
