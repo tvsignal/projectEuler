@@ -1,13 +1,13 @@
-new Euler().main()
 
-import static java.lang.Math.*
 import static java.lang.Integer.*
+import static java.lang.Math.*
 
 public class Euler {
 
-    void main() {
-        assert noDigitsInCommon("4327","659")
-        println problem32()
+    public static void main(String[] args) {
+        def e = new Euler()
+        assert e.noDigitsInCommon("4327","659")
+        println e.problem42()
     }
     
     // 1: multiples of 3 or 5
@@ -106,16 +106,30 @@ public class Euler {
         products.unique().sum()
     }
 
+    def pentagons = []
+    def pentagon(n) { pentagons[n] ? pentagons[n] : (pentagons[n] = n*(3*n-1)/2) }
+
     //42: Pentagon numbers
     def problem42() {
         def minDelta = Integer.MAX_VALUE
-        def separation = 10
-        def minN = 1
-        while(true) {
-
-            separation += 10
+        def minSep = 1
+        def minJ = 1
+        (minSep..minSep+20).each { sep ->
+            (minJ..minJ+100-1).each { j ->
+                def k = j + sep
+                if (pentagons.contains(pentagon(k) - pentagon(j))) {
+                    println "$j, $k: " + pentagon(j) + " " + pentagon(k)
+                    def sum = pentagon(k) + pentagon(j)
+                    def searchInd = k+1
+                    while(pentagon(searchInd) <= sum) {
+                        if (pentagon(searchInd) == sum)) {
+                            minDelta = min(pentagon(k) - pentagon(j), minDelta)
+                        }
+                        searchInd++
+                    }
+                }
+            }
         }
-
     }
 
     def noDigitsInCommon(a, b) {
